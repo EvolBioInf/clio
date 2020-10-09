@@ -1,0 +1,7 @@
+*.go
+doc/*.aux
+doc/*.dvi
+doc/*.log
+doc/*.pdf
+doc/*.toc
+doc/clio.tex
