@@ -26,13 +26,14 @@
 #+begin_src latex
   \subsection{Function \texttt{ParseFiles}}
   !\texttt{ParseFiles} iterates over a set of files and applies the same
-  !function to each one.
+  !function to each one. The arguments of that function are variadic and
+  !have the empty interface type.
 #+end_src
 #+begin_src go <<Functions>>=
-  func ParseFiles(files []string, fn FileAction) {
+  func ParseFiles(files []string, fn FileAction, args ...interface{}) {
 	  r := os.Stdin
 	  if len(files) == 0 {
-		  fn(r)
+		  fn(r, args...)
 	  } else {
 		  //<<Iterate over files>>
 	  }
@@ -40,8 +41,8 @@
 #+end_src
 #+begin_src latex
   !\texttt{FileAction} takes as first, and possibly only, argument an
-  !\texttt{io.Reader}. In addition, it can take an arbitrary number of
-  !arguments of any type to pass further information.
+  !\texttt{io.Reader}. In addition, it can take variadic
+  !arguments of type empty interface.
 #+end_src
 #+begin_src go <<Type declarations>>=
   type FileAction func(io.Reader, ...interface{})
@@ -62,7 +63,7 @@
 	  if err != nil {
 		  log.Fatalf("couldn't open %q\n", f)
 	  }
-	  fn(r)
+	  fn(r, args...)
 	  r.Close()
   }
 #+end_src
@@ -75,29 +76,22 @@
 #+end_src
 #+begin_src latex
   \subsection{Function \texttt{PrintInfo}}
-  !\texttt{PrintInfo} prints the name, version, date, and license of a
-  !program. 
+  !\texttt{PrintInfo} prints the name of a program, its version, date of
+  !compilation, author, her/his email address, and the program's
+  !license.
 #+end_src
 #+begin_src go <<Functions>>=
-  func PrintInfo(name, version, date string) {
+  func PrintInfo(name, version, date, author, email, license string) {
 	  fmt.Printf("%s %s, %s\n", name, version, date)
-	  a := "Bernhard Haubold, haubold@evolbio.mpg.de"
-	  fmt.Printf("Author: %s\n", a)
-	  l := "Gnu General Public License, " +
-		  "https://www.gnu.org/licenses/gpl.html"
-	  fmt.Printf("License: %s\n", l)
+	  fmt.Printf("Author: %s, %s\n", author, email)
+	  fmt.Printf("License: %s\n", license)
   }
 #+end_src
 #+begin_src latex
-  To complete \texttt{PrintInfo}, we import the package \texttt{fmt}.
-#+end_src
-#+begin_src go <<Imports>>=
-  "fmt"
-#+end_src
-#+begin_src latex
   \subsection{Function \texttt{Usage}}
-  !\texttt{Usage} is the response to a request for
+  !\texttt{Usage} sets the response to a request for
   !help.
+  This is achieved by setting the \texttt{flag.Usage} function.
 #+end_src
 #+begin_src go <<Functions>>=
   func Usage(usage, purpose, example string) {
@@ -111,8 +105,9 @@
   }
 #+end_src
 #+begin_src latex
-  We import the \texttt{flag} package.
+  We import the \texttt{flag} and \texttt{fmt} packages.
 #+end_src
 #+begin_src go <<Imports>>=
   "flag"
+  "fmt"
 #+end_src
