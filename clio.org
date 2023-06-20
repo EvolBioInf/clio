@@ -111,3 +111,20 @@
   "flag"
   "fmt"
 #+end_src
+#+begin_src latex
+  \subsection{Function \texttt{PrepLog}}
+  In \texttt{util} and elsewhere, we handle errors via the \texttt{log}
+  package. By default, this prefixes the error message with time and
+  date. For command line programs, we'd like error messages prefixed
+  with the name of the program and with date and time suppressed.
+
+  !\texttt{PrepLog} takes as argument the program name and sets
+  !this as the prefix for error messages from the \texttt{log} package.
+#+end_src
+#+begin_src go <<Functions>>=
+  func PrepLog(name string) {
+	  m := fmt.Sprintf("%s: ", name)
+	  log.SetPrefix(m)
+	  log.SetFlags(0)
+  }
+#+end_src

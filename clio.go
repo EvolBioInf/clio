@@ -46,3 +46,10 @@ func Usage(usage, purpose, example string) {
 		flag.PrintDefaults()
 	}
 }
+
+// PrepLog takes as argument the program name and sets this as the prefix for error messages from the log package.
+func PrepLog(name string) {
+	m := fmt.Sprintf("%s: ", name)
+	log.SetPrefix(m)
+	log.SetFlags(0)
+}
