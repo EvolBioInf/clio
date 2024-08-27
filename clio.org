@@ -77,14 +77,51 @@
 #+begin_src latex
   \subsection{Function \texttt{PrintInfo}}
   !\texttt{PrintInfo} prints the name of a program, its version, date of
-  !compilation, author, her/his email address, and the program's
-  !license.
+  !compilation, author names, their email addresses, and the program's
+  !license. Author names and email addresses are comma-separated.
 #+end_src
 #+begin_src go <<Functions>>=
-  func PrintInfo(name, version, date, author, email, license string) {
+  func PrintInfo(name, version, date, authors, emails,
+	  license string) {
 	  fmt.Printf("%s %s, %s\n", name, version, date)
-	  fmt.Printf("Author: %s, %s\n", author, email)
+	  //<<Print authors and email addresses>>
 	  fmt.Printf("License: %s\n", license)
+  }
+#+end_src
+#+begin_export latex
+We split the author names and email addresses at the comma. Then we
+either print the name and email address of a single author or a list
+of names and email addresses for multiple authors.
+#+end_export
+#+begin_src go <<Print authors and email addresses>>=
+  aus := strings.Split(authors, ",")
+  ems := strings.Split(emails, ",")
+  if len(aus) == 1 {
+	  //<<Print single author>>
+  } else if len(aus) > 1 {
+	  //<<Print multiple authors>>
+  }
+#+end_src
+#+begin_export latex
+We import \ty{strings}.
+#+end_export
+#+begin_src go <<Imports>>=
+  "strings"
+#+end_src
+#+begin_export latex
+We print the name and email address of a single author.
+#+end_export
+#+begin_src go <<Print single author>>=
+  fmt.Printf("Author: %s, %s\n", aus[0], ems[0])
+#+end_src
+#+begin_export latex
+For multiple authors, we print each pair of name and email address on
+a separate line, which we indent and enumerate.
+#+end_export
+#+begin_src go <<Print multiple authors>>=
+  fmt.Printf("Authors:\n")
+  for i, au := range aus {
+	  fmt.Printf("\t%d) %s, %s\n", i+1, au, ems[i])
   }
 #+end_src
 #+begin_src latex
