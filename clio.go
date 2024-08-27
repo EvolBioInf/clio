@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 // FileAction takes as first, and possibly only, argument an io.Reader. In addition, it can take variadic arguments of type empty interface.
@@ -29,10 +30,20 @@ func ParseFiles(files []string, fn FileAction, args ...interface{}) {
 	}
 }
 
-// PrintInfo prints the name of a program, its version, date of compilation, author, her/his email address, and the program's license.
-func PrintInfo(name, version, date, author, email, license string) {
+// PrintInfo prints the name of a program, its version, date of compilation, author names, their email addresses, and the program's license. Author names and email addresses are comma-separated.
+func PrintInfo(name, version, date, authors, emails,
+	license string) {
 	fmt.Printf("%s %s, %s\n", name, version, date)
-	fmt.Printf("Author: %s, %s\n", author, email)
+	aus := strings.Split(authors, ",")
+	ems := strings.Split(emails, ",")
+	if len(aus) == 1 {
+		fmt.Printf("Author: %s, %s\n", aus[0], ems[0])
+	} else if len(aus) > 1 {
+		fmt.Printf("Authors:\n")
+		for i, au := range aus {
+			fmt.Printf("\t%d) %s, %s\n", i+1, au, ems[i])
+		}
+	}
 	fmt.Printf("License: %s\n", license)
 }
 
