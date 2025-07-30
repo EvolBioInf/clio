@@ -4,3 +4,5 @@ doc/*.log
 doc/*.pdf
 doc/*.toc
 doc/clio.tex
+doc/date.txt
+doc/version.txt
